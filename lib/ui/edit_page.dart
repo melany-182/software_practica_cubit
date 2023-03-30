@@ -23,7 +23,7 @@ class EditPage extends StatelessWidget {
                 hintText: 'Introduzca un elemento',
               ),
               onSubmitted: (value) {
-                List<String> items = context.read<ItemsCubit>().state.items;
+                List<String>? items = context.read<ItemsCubit>().state.items!;
                 String? selectedItem =
                     BlocProvider.of<ItemsCubit>(context).state.selectedItem;
                 BlocProvider.of<ItemsCubit>(context)

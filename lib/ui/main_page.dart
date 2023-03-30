@@ -23,15 +23,14 @@ class MainPage extends StatelessWidget {
                 String? selectedItem = state.selectedItem;
                 return DropdownButton<String>(
                   hint: const Text('Selecciona un elemento'),
-                  value: state.items.isNotEmpty ? selectedItem : null,
+                  value: state.items!.isNotEmpty ? selectedItem : null,
                   onChanged: (newValue) {
                     BlocProvider.of<ItemsCubit>(context)
-                        .selectItem(state.items, newValue);
-                    debugPrint('${BlocProvider.of<ItemsCubit>(context).state}');
+                        .selectItem(state.items!, newValue);
                   },
                   focusColor: Colors.white,
-                  items:
-                      state.items.map<DropdownMenuItem<String>>((String value) {
+                  items: state.items!
+                      .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -48,8 +47,8 @@ class MainPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AddPage(
-                            itemCubit: BlocProvider.of<ItemsCubit>(context)),
+                        builder: (context) => AddPage(),
+                        // itemCubit: BlocProvider.of<ItemsCubit>(context)
                       ),
                     );
                   },
@@ -59,7 +58,7 @@ class MainPage extends StatelessWidget {
                   onPressed: () {
                     if (BlocProvider.of<ItemsCubit>(context)
                         .state
-                        .items
+                        .items!
                         .isNotEmpty) {
                       Navigator.push(
                         context,
@@ -67,7 +66,7 @@ class MainPage extends StatelessWidget {
                           builder: (context) => EditPage(
                             item: BlocProvider.of<ItemsCubit>(context)
                                 .state
-                                .items[0],
+                                .items![0],
                             index: 0,
                           ),
                         ),
@@ -80,15 +79,15 @@ class MainPage extends StatelessWidget {
                   onPressed: () {
                     if (BlocProvider.of<ItemsCubit>(context)
                         .state
-                        .items
+                        .items!
                         .isNotEmpty) {
                       final items =
                           BlocProvider.of<ItemsCubit>(context).state.items;
                       final selectedItem = BlocProvider.of<ItemsCubit>(context)
                           .state
                           .selectedItem;
-                      BlocProvider.of<ItemsCubit>(context).deleteItem(
-                          items, items.indexOf(selectedItem!), selectedItem);
+                      BlocProvider.of<ItemsCubit>(context)
+                          .deleteItem(items!, selectedItem!);
                     }
                   },
                   child: const Text('Eliminar'),

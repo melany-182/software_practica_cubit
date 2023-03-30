@@ -13,11 +13,10 @@ class ItemsCubit extends Cubit<ItemsState> {
   }
 
   void addItem(List<String> items, String newItem, String selectedItem) {
-    items.add(newItem);
-    emit(ItemsState(
-      items,
-      selectedItem,
-    ));
+    final newItemsList = List<String>.from(items)..add(newItem);
+    final newState =
+        state.copyWith(items: newItemsList, selectedItem: selectedItem);
+    emit(newState);
   }
 
   void editItem(
@@ -29,11 +28,12 @@ class ItemsCubit extends Cubit<ItemsState> {
     ));
   }
 
-  void deleteItem(List<String> items, int index, String selectedItem) {
+  void deleteItem(List<String> items, String selectedItem) {
+    final index = items.indexOf(selectedItem);
     items.removeAt(index);
     emit(ItemsState(
       items,
-      selectedItem,
+      items.isNotEmpty ? items[0] : null,
     ));
   }
 }

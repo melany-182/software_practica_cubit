@@ -1,5 +1,5 @@
 class ItemsState {
-  final List<String> items;
+  final List<String>? items;
   String? selectedItem;
 
   ItemsState(this.items, this.selectedItem);

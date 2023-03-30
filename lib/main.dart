@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:software_practica_cubit/bloc/items_cubit.dart';
+import 'package:software_practica_cubit/ui/add_page.dart';
 import 'package:software_practica_cubit/ui/main_page.dart';
 
 void main() {
@@ -23,6 +24,12 @@ class MyApp extends StatelessWidget {
         create: (_) => ItemsCubit(),
         child: const MainPage(),
       ),
+      routes: {
+        '/add': (context) => BlocProvider(
+              create: (_) => BlocProvider.of<ItemsCubit>(context),
+              child: AddPage(),
+            ),
+      },
       debugShowCheckedModeBanner: false,
     );
   }
