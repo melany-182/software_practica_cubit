@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:software_practica_cubit/bloc/item_cubit.dart';
+import 'package:software_practica_cubit/bloc/items_cubit.dart';
 
 class EditPage extends StatelessWidget {
   final String item;
@@ -23,7 +23,11 @@ class EditPage extends StatelessWidget {
                 hintText: 'Introduzca un elemento',
               ),
               onSubmitted: (value) {
-                context.read<ItemCubit>().editItem(value, index);
+                List<String> items = context.read<ItemsCubit>().state.items;
+                String? selectedItem =
+                    BlocProvider.of<ItemsCubit>(context).state.selectedItem;
+                BlocProvider.of<ItemsCubit>(context)
+                    .editItem(items, index, value, selectedItem!);
                 Navigator.pop(context);
               },
             ),

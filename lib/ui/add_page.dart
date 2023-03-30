@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:software_practica_cubit/bloc/item_cubit.dart';
+import 'package:software_practica_cubit/bloc/items_cubit.dart';
 
 class AddPage extends StatelessWidget {
-  final ItemCubit itemCubit;
+  final ItemsCubit itemCubit;
   const AddPage({Key? key, required this.itemCubit}) : super(key: key);
 
   @override
@@ -23,7 +23,10 @@ class AddPage extends StatelessWidget {
                   hintText: 'Introduzca un elemento',
                 ),
                 onSubmitted: (value) {
-                  itemCubit.addItem(value);
+                  List<String> items = itemCubit.state.items;
+                  String? selectedItem = itemCubit.state.selectedItem;
+                  BlocProvider.of<ItemsCubit>(context)
+                      .addItem(items, value, selectedItem!);
                   Navigator.pop(context);
                 },
               ),
