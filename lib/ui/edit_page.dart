@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:software_practica_cubit/bloc/items_cubit.dart';
 
 class EditPage extends StatelessWidget {
-  final String item;
-  final int index;
-  const EditPage({Key? key, required this.item, required this.index})
-      : super(key: key);
+  EditPage({Key? key}) : super(key: key);
+
+  final updatedItemInput = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -14,25 +13,49 @@ class EditPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Editar elemento'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              decoration: const InputDecoration(
-                hintText: 'Introduzca un elemento',
-              ),
-              onSubmitted: (value) {
-                List<String>? items = context.read<ItemsCubit>().state.items!;
-                String? selectedItem =
-                    BlocProvider.of<ItemsCubit>(context).state.selectedItem;
-                BlocProvider.of<ItemsCubit>(context)
-                    .editItem(items, index, value, selectedItem!);
-                Navigator.pop(context);
-              },
+      body: Builder(
+        builder: (context) {
+          return Container(
+            padding: const EdgeInsets.all(50),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: updatedItemInput,
+                  decoration: const InputDecoration(
+                    hintText: 'Introduzca el nuevo valor del elemento',
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancelar'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        String? selectedItem =
+                            BlocProvider.of<ItemsCubit>(context)
+                                .state
+                                .selectedItem;
+                        BlocProvider.of<ItemsCubit>(context)
+                            .editItem(updatedItemInput.text, selectedItem!);
+                        debugPrint(
+                            'Elemento editado! Lista actualizada: ${BlocProvider.of<ItemsCubit>(context).state.items!.toString()}');
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Editar'),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

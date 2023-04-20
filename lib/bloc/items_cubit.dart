@@ -1,39 +1,55 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:software_practica_cubit/bloc/items_state.dart';
 
+// esta clase almacena el estado y declara los métodos que lo modifican
 class ItemsCubit extends Cubit<ItemsState> {
-  // almacena el estado y declara los métodos
   ItemsCubit()
       : super(ItemsState(
-            ['a', 'b', 'c'], 'a')); // estado inicial, valores iniciales
+            items: ['a', 'b', 'c'],
+            selectedItem: 'a')); // estado inicial, valores iniciales
 
-  void selectItem(List<String> items, String? selectedItem) {
-    final newState = state.copyWith(items: items, selectedItem: selectedItem);
-    emit(newState);
-  }
-
-  void addItem(List<String> items, String newItem, String selectedItem) {
-    final newItemsList = List<String>.from(items)..add(newItem);
-    final newState =
-        state.copyWith(items: newItemsList, selectedItem: selectedItem);
-    emit(newState);
-  }
-
-  void editItem(
-      List<String> items, int index, String newItem, String selectedItem) {
-    items[index] = newItem;
+  void selectItem(String? selectedItem) {
+    List<String>? items = state.items;
     emit(ItemsState(
-      items,
-      selectedItem,
+      items: items,
+      selectedItem: selectedItem,
     ));
   }
 
-  void deleteItem(List<String> items, String selectedItem) {
-    final index = items.indexOf(selectedItem);
-    items.removeAt(index);
+  void addItem(String newItem, String selectedItem) {
+    List<String>? items = state.items;
+    items?.add(newItem);
     emit(ItemsState(
-      items,
-      items.isNotEmpty ? items[0] : null,
+      items: items,
+      selectedItem: newItem,
+    ));
+  }
+
+  void editItem(String updatedItem, String selectedItem) {
+    List<String>? items = state.items;
+    for (int i = 0; i < items!.length; i++) {
+      if (items[i] == selectedItem) {
+        items[i] = updatedItem;
+        break;
+      }
+    }
+    emit(ItemsState(
+      items: items,
+      selectedItem: updatedItem,
+    ));
+  }
+
+  void deleteItem(String selectedItem) {
+    List<String>? items = state.items;
+    for (int i = 0; i < items!.length; i++) {
+      if (items[i] == selectedItem) {
+        items.removeAt(i);
+        break;
+      }
+    }
+    emit(ItemsState(
+      items: items,
+      selectedItem: items.isNotEmpty ? items[0] : '',
     ));
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:software_practica_cubit/bloc/items_cubit.dart';
 import 'package:software_practica_cubit/ui/add_page.dart';
+import 'package:software_practica_cubit/ui/edit_page.dart';
 import 'package:software_practica_cubit/ui/main_page.dart';
 
 void main() {
@@ -13,24 +14,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // este es el nivel más alto de la aplicación
-      title: 'Ingeniería del Software - Práctica Cubit',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
+    // este es el nivel más alto de la aplicación
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ItemsCubit>(
+          create: (context) => ItemsCubit(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Práctica Cubit',
+        theme: ThemeData(
+          primarySwatch: Colors.deepPurple,
+        ),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const MainPage(),
+          '/add': (context) => AddPage(),
+          '/edit': (context) => EditPage(),
+        },
+        debugShowCheckedModeBanner: false,
       ),
-      // crear el BlocProvider por encima del widget que lo va a utilizar
-      home: BlocProvider(
-        create: (_) => ItemsCubit(),
-        child: const MainPage(),
-      ),
-      routes: {
-        '/add': (context) => BlocProvider(
-              create: (_) => BlocProvider.of<ItemsCubit>(context),
-              child: AddPage(),
-            ),
-      },
-      debugShowCheckedModeBanner: false,
     );
   }
 }
